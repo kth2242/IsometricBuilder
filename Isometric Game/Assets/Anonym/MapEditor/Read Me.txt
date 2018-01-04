@@ -1,0 +1,93 @@
+﻿[Anonym Isometric Builder]
+    Editor Extensions/2D & Sprite Management
+    This extension requires one license per seat
+    Requires Unity 2017.1 or higher
+
+    I will open the forum soon
+    Email me if you have any bugs or comments
+    by Anonym(hg.studio.one@gmail.com)
+
+[Tutorials]
+    1.  Youtube Tutorials
+        https://www.youtube.com/playlist?list=PLFBcmjDxL7ATka0irlRs64M6YBmOYeJVC
+    
+    2.  Components Guide Sway
+        https://sway.com/DrytvEKsYMk90IQD?ref=Link
+
+
+[Version History]
+    1.0 Initial Version
+    1.0.1 BugFix
+        Invalid instance generation bug
+        Coordinates Bug of bulk
+    1.0.2 
+        [Guide for users who were using previous versions]
+        There are file creation/deletion issues in the process of grouping some classes into Util folders. 
+        Please check the following steps and proceed.
+        (If you had individual work in the Anonym folder, back up and update the work.)
+            1. Create a new scene
+            2. Delete the Assets / Anonym folder
+            3. Update to the latest version
+
+        [Fixed Bug]
+        Missing Sprite Link
+        Building Error
+
+    1.1.0
+        [New features]
+        1. Particle sort trick
+            check the 3D position of each particles to enhance the visibility check and collision check
+
+        2. Depth adjustment of tile decoration (overlay & obstacle)
+            Now you can easily adjust the depth of all the decorations in the tile's Inspector.
+
+        [Deactivate function]
+        The related functionality has been improved and now bsoIsometricSorting of IsoMap is no longer necessary.
+        (It is no longer visible when Off in the Inspector)
+
+        and Minor bug fixes
+
+    1.1.1
+        [New]
+        Resource: White Style Tile
+        Scene: Particle & Physics Sample Scene
+
+        [Bug Fixed]
+        Now...
+        Bulk.Coordinates can find the Bulk's Grid.
+        If there was a problem bulk in project, move the bulk once to the child of another object and it will work normally.
+
+        Grid component update all affected bulk / tiles when LocalGrid is activated / deactivated.
+
+        Overlay and Obstacle of IsoTile are created with modified size according to the size of tile.
+
+        Particle System's trsform is applied to Particle Trick normally.
+        When using gradient colors, colors are applied normally.
+
+        Nothing happens in Self CopyCat of IsoTile.
+
+        Displayed by applying the SpriteRenderer's color to the Union Tile inspector.
+
+[Graphic Resource (CC0, CC-BY)]
+    1.	Kenney’s Asset
+        A.	Isometric Dungeon Tiles
+            http://www.kenney.nl/assets/isometric-dungeon-tiles
+        B.	Isometric City
+            http://www.kenney.nl/assets/isometric-city
+        C.	Isometric Blocks
+            http://www.kenney.nl/assets/isometric-blocks
+            
+    2.	Medieval Building Tileset
+        https://opengameart.org/content/isometric-64x64-medieval-building-tileset
+
+    3.  laetissima
+        https://opengameart.org/users/laetissima
+        
+[On Developing]
+    CharacterController
+    NeviMesh Generator
+    Selection Tool
+    Pixel Perfect Tool
+    Style Sheets
+    3D Support
+    Isometric Light
