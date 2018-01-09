@@ -33,6 +33,15 @@ namespace Anonym.Isometric
 		[SerializeField]
 		InGameDirection LastDirection = InGameDirection.Top_Move;
 
+        private Animator m_anim;
+        public AnimationClip clip;
+
+        bool bIsAttacking = false;
+        bool bIsAttackingTwice = false;
+        float fFirstAttackTime;
+        float fSecondAttackTime;
+        float AttackTime;
+
 		[SerializeField]
 		CharacterController CC;
 		[SerializeField]
@@ -224,7 +233,9 @@ namespace Anonym.Isometric
 			fMinMovement = Mathf.Min(CC.minMoveDistance, fGridTolerance);
 			fMinMovement *= fMinMovement;
 
-			vDestination.Set(Mathf.RoundToInt(CC.transform.localPosition.x), 
+            m_anim =  GameObject.Find("Char").GetComponent<Animator>();
+
+            vDestination.Set(Mathf.RoundToInt(CC.transform.localPosition.x), 
 						0, Mathf.RoundToInt(CC.transform.localPosition.z));
 		}
 		void Update()
@@ -232,8 +243,11 @@ namespace Anonym.Isometric
 			if (Application.isPlaying)
 			{
 				InputProcess();
-				update_Position();	
-			}
+				update_Position();
+                UpdateAnimClipTimes();
+               // AttackUpdate();
+
+            }
 			if (transform.hasChanged && sortingOrder != null)
 			{
 				sortingOrder.iExternAdd = SortingOrder_Adjustment();
@@ -258,7 +272,9 @@ namespace Anonym.Isometric
 			{
 				Vector3 vLengthToDestination = vDestination - CC.transform.localPosition;
 				vLengthToDestination.y = 0;
-				
+
+                //m_anim.SetBool("IsRunning",true);
+
 				if (vLengthToDestination.sqrMagnitude <= fMinMovement)
 				{
 					arrival();
@@ -289,7 +305,8 @@ namespace Anonym.Isometric
 		void arrival()
 		{
 			bOnMoving = bDashing = false;
-		}
+            //m_anim.SetBool("IsRunning", false);
+        }
 
 		void InputProcess()
 		{
@@ -297,23 +314,87 @@ namespace Anonym.Isometric
 			if(Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
 			{				
 				EnQueueTo(bShifted ? InGameDirection.LT_Rotate : InGameDirection.LT_Move);
-			}
+                GameObject.Find("Char").GetComponent<SpriteRenderer>().flipX = true;
+                GameObject.Find("BasicShirt").GetComponent<SpriteRenderer>().flipX = true;
+                GameObject.Find("BasicPants").GetComponent<SpriteRenderer>().flipX = true;
+            }
 			else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
 			{
 				EnQueueTo(bShifted ? InGameDirection.RD_Rotate : InGameDirection.RD_Move);
-			}
+                GameObject.Find("Char").GetComponent<SpriteRenderer>().flipX = false;
+                GameObject.Find("BasicShirt").GetComponent<SpriteRenderer>().flipX = false;
+                GameObject.Find("BasicPants").GetComponent<SpriteRenderer>().flipX = false;
+
+            }
 			else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
 			{
 				EnQueueTo(bShifted ? InGameDirection.RT_Rotate : InGameDirection.RT_Move);
-			}
+                GameObject.Find("Char").GetComponent<SpriteRenderer>().flipX = false;
+                GameObject.Find("BasicShirt").GetComponent<SpriteRenderer>().flipX = false;
+                GameObject.Find("BasicPants").GetComponent<SpriteRenderer>().flipX = false;
+            }
 			else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
 			{
 				EnQueueTo(bShifted ? InGameDirection.LD_Rotate : InGameDirection.LD_Move);
-			}
+                GameObject.Find("Char").GetComponent<SpriteRenderer>().flipX = true;
+                GameObject.Find("BasicShirt").GetComponent<SpriteRenderer>().flipX = true;
+                GameObject.Find("BasicPants").GetComponent<SpriteRenderer>().flipX = true;
+            }
 			else if (Input.GetKeyDown(KeyCode.Space))
 			{
 				Jump();
 			}
+            else if(Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                Attack();
+            }
 		}
-	}
+
+        void Attack()
+        {
+            if (!bIsAttackingTwice&&!bIsAttacking)
+            {
+                bIsAttacking = true;
+                AttackTime = 0;
+            }
+            else if(bIsAttacking&&!bIsAttackingTwice)
+            {
+                bIsAttacking = false;
+                bIsAttackingTwice = true;
+                AttackTime = 0;
+            }
+        }
+        
+        void AttackUpdate()
+        {
+            if ((fFirstAttackTime <= AttackTime)&&bIsAttacking)
+            {
+                bIsAttacking = false;
+            }
+            if ((fSecondAttackTime<=AttackTime)&&bIsAttackingTwice)
+            {
+                bIsAttackingTwice = false;
+            }
+            AttackTime += Time.deltaTime;
+
+            m_anim.SetBool("IsAttacking", bIsAttacking);
+            m_anim.SetBool("IsAttackingTwice", bIsAttackingTwice);
+        }
+        public void UpdateAnimClipTimes()
+        {
+            AnimationClip[] clips = m_anim.runtimeAnimatorController.animationClips;
+            foreach (AnimationClip clip in clips)
+            {
+                switch (clip.name)
+                {
+                    case "Attack_01":
+                        fFirstAttackTime = clip.length;
+                        break;
+                    case "Attack_02":
+                        fSecondAttackTime = clip.length;
+                        break;
+                }
+            }
+        }
+    }
 }

@@ -41,3 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Pants
+    uniqueID: 400414459
+    locked: 0
+  - name: Shirt
+    uniqueID: 3512510701
+    locked: 0
